@@ -397,7 +397,7 @@ export const Sileo = memo(function Sileo({
 		() => ({
 			transform: `scaleY(${open ? 1 : HEIGHT / expanded})`,
 			width: resolvedPillWidth,
-			height: expanded,
+			height: open ? expanded - 5 : expanded,
 		}),
 		[open, expanded, resolvedPillWidth],
 	);

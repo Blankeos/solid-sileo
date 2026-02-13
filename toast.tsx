@@ -261,10 +261,15 @@ export function Toaster({
 	const timersRef = useRef(new Map<string, number>());
 	const listRef = useRef(toasts);
 	const latestRef = useRef<string | undefined>(undefined);
-	const handlersCache = useRef(new Map<string, {
-		enter: MouseEventHandler<HTMLButtonElement>;
-		leave: MouseEventHandler<HTMLButtonElement>;
-	}>());
+	const handlersCache = useRef(
+		new Map<
+			string,
+			{
+				enter: MouseEventHandler<HTMLButtonElement>;
+				leave: MouseEventHandler<HTMLButtonElement>;
+			}
+		>(),
+	);
 
 	// Update store on mount
 	useEffect(() => {
@@ -323,16 +328,22 @@ export function Toaster({
 	}, [toasts, schedule]);
 
 	// Stable handler refs
-	const handleMouseEnterRef = useRef<MouseEventHandler<HTMLButtonElement>>();
-	const handleMouseLeaveRef = useRef<MouseEventHandler<HTMLButtonElement>>();
+	const handleMouseEnterRef =
+		useRef<MouseEventHandler<HTMLButtonElement>>(null);
+	const handleMouseLeaveRef =
+		useRef<MouseEventHandler<HTMLButtonElement>>(null);
 
-	const handleMouseEnter = useCallback<MouseEventHandler<HTMLButtonElement>>(() => {
+	const handleMouseEnter = useCallback<
+		MouseEventHandler<HTMLButtonElement>
+	>(() => {
 		if (hoverRef.current) return;
 		hoverRef.current = true;
 		clearAllTimers();
 	}, [clearAllTimers]);
 
-	const handleMouseLeave = useCallback<MouseEventHandler<HTMLButtonElement>>(() => {
+	const handleMouseLeave = useCallback<
+		MouseEventHandler<HTMLButtonElement>
+	>(() => {
 		if (!hoverRef.current) return;
 		hoverRef.current = false;
 		schedule(listRef.current);
@@ -381,9 +392,10 @@ export function Toaster({
 		(pos: ToastPosition): CSSProperties | undefined => {
 			if (offset === undefined) return undefined;
 
-			const o = typeof offset === "object"
-				? offset
-				: { top: offset, right: offset, bottom: offset, left: offset };
+			const o =
+				typeof offset === "object"
+					? offset
+					: { top: offset, right: offset, bottom: offset, left: offset };
 
 			const s: CSSProperties = {};
 			const px = (v: ToasterOffsetValue) =>
