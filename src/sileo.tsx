@@ -66,6 +66,7 @@ interface SileoProps {
 	refreshKey?: string;
 	onMouseEnter?: MouseEventHandler<HTMLButtonElement>;
 	onMouseLeave?: MouseEventHandler<HTMLButtonElement>;
+	onDismiss?: () => void;
 }
 
 /* ---------------------------------- Icons --------------------------------- */
@@ -133,6 +134,7 @@ export const Sileo = memo(function Sileo({
 	refreshKey,
 	onMouseEnter,
 	onMouseLeave,
+	onDismiss,
 }: SileoProps) {
 	const next: View = useMemo(
 		() => ({ title, description, state, icon, styles, button, fill }),
@@ -428,10 +430,59 @@ export const Sileo = memo(function Sileo({
 			[open],
 		);
 
+	/* -------------------------------- Swipe ----------------------------------- */
+
+	const SWIPE_DISMISS = 30;
+	const SWIPE_MAX = 20;
+	const buttonRef = useRef<HTMLButtonElement>(null);
+	const pointerStartRef = useRef<number | null>(null);
+	const onDismissRef = useRef(onDismiss);
+	onDismissRef.current = onDismiss;
+
+	useEffect(() => {
+		const el = buttonRef.current;
+		if (!el) return;
+
+		const onMove = (e: PointerEvent) => {
+			if (pointerStartRef.current === null) return;
+			const dy = e.clientY - pointerStartRef.current;
+			const sign = dy > 0 ? 1 : -1;
+			const clamped = Math.min(Math.abs(dy), SWIPE_MAX) * sign;
+			el.style.transform = `translateY(${clamped}px)`;
+		};
+
+		const onUp = (e: PointerEvent) => {
+			if (pointerStartRef.current === null) return;
+			const dy = e.clientY - pointerStartRef.current;
+			pointerStartRef.current = null;
+			el.style.transform = "";
+			if (Math.abs(dy) > SWIPE_DISMISS) {
+				onDismissRef.current?.();
+			}
+		};
+
+		el.addEventListener("pointermove", onMove);
+		el.addEventListener("pointerup", onUp);
+		return () => {
+			el.removeEventListener("pointermove", onMove);
+			el.removeEventListener("pointerup", onUp);
+		};
+	}, []);
+
+	const handlePointerDown = useCallback(
+		(e: React.PointerEvent<HTMLButtonElement>) => {
+			if (exiting || !onDismiss) return;
+			pointerStartRef.current = e.clientY;
+			e.currentTarget.setPointerCapture(e.pointerId);
+		},
+		[exiting, onDismiss],
+	);
+
 	/* --------------------------------- Render --------------------------------- */
 
 	return (
 		<button
+			ref={buttonRef}
 			type="button"
 			data-sileo-toast
 			data-ready={ready}
@@ -445,6 +496,7 @@ export const Sileo = memo(function Sileo({
 			onMouseEnter={handleEnter}
 			onMouseLeave={handleLeave}
 			onTransitionEnd={handleTransitionEnd}
+			onPointerDown={handlePointerDown}
 		>
 			<div data-sileo-canvas data-edge={expand}>
 				<svg

@@ -144,7 +144,7 @@ const createToast = (options: InternalSileoOptions) => {
 	if (prev) {
 		store.update((p) => p.map((t) => (t.id === id ? item : t)));
 	} else {
-		store.update((p) => [...p, item]);
+		store.update((p) => [...p.filter((t) => t.id !== id), item]);
 	}
 	return { id, duration: merged.duration ?? DEFAULT_DURATION };
 };
@@ -236,6 +236,7 @@ export function Toaster({
 			{
 				enter: MouseEventHandler<HTMLButtonElement>;
 				leave: MouseEventHandler<HTMLButtonElement>;
+				dismiss: () => void;
 			}
 		>(),
 	);
@@ -343,6 +344,7 @@ export function Toaster({
 				);
 				handleMouseLeaveRef.current?.(e);
 			}) as MouseEventHandler<HTMLButtonElement>,
+			dismiss: () => dismissToast(toastId),
 		};
 
 		handlersCache.current.set(toastId, cached);
@@ -427,6 +429,7 @@ export function Toaster({
 									canExpand={activeId === undefined || activeId === item.id}
 									onMouseEnter={h.enter}
 									onMouseLeave={h.leave}
+									onDismiss={h.dismiss}
 								/>
 							);
 						})}

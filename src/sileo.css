@@ -55,6 +55,7 @@
 	position: relative;
 	cursor: pointer;
 	pointer-events: auto;
+	touch-action: none;
 	border: 0;
 	background: transparent;
 	padding: 0;
