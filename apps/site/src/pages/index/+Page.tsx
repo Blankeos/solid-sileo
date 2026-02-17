@@ -178,7 +178,7 @@ export default function Page() {
 
           <div class="hidden items-center gap-1 sm:flex">
             <a
-              href="https://github.com/hiaaryan/sileo"
+              href="https://github.com/Blankeos/solid-sileo"
               target="_blank"
               rel="noopener noreferrer"
               class="flex h-8 items-center rounded-full px-3 font-medium text-muted-foreground text-xs transition-colors hover:text-foreground"
@@ -187,7 +187,7 @@ export default function Page() {
             </a>
             <a
               class="flex h-8 items-center rounded-full px-3 font-medium text-muted-foreground text-xs transition-colors hover:text-foreground"
-              href="https://github.com/hiaaryan/sileo#readme"
+              href="https://sileo.aaryan.design/docs"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -195,7 +195,7 @@ export default function Page() {
             </a>
             <a
               class="flex h-8 items-center rounded-full px-3 font-medium text-muted-foreground text-xs transition-colors hover:text-foreground"
-              href="#play"
+              href="/play"
             >
               Playground
             </a>
@@ -310,7 +310,7 @@ export default function Page() {
               <div class="flex items-center gap-5">
                 <a
                   class="flex items-center gap-1.5 font-medium text-muted-foreground text-xs transition-colors hover:text-foreground"
-                  href="#play"
+                  href="/play"
                 >
                   Playground
                   <svg
@@ -332,7 +332,7 @@ export default function Page() {
                 </a>
                 <a
                   class="font-medium text-foreground text-xs transition-colors hover:text-foreground-hover"
-                  href="https://github.com/hiaaryan/sileo#readme"
+                  href="https://sileo.aaryan.design/docs"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -370,7 +370,7 @@ export default function Page() {
           <span class="text-muted-foreground text-xs">Sileo - MIT License</span>
           <a
             class="text-muted-foreground text-xs transition-colors hover:text-foreground"
-            href="#play"
+            href="/play"
           >
             Playground -&gt;
           </a>

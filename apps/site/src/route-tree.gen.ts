@@ -14,7 +14,8 @@ export type { PageRoute, UseParamsResult };
 const pageRoutes = [
   "/",
   "/dashboard",
-  "/dashboard/settings"
+  "/dashboard/settings",
+  "/play"
 ] as const;
 
 type PageRoute = typeof pageRoutes[number];
