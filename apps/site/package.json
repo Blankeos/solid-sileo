@@ -28,7 +28,7 @@
     "bagon-hooks": "^0.0.6",
     "hono": "^4.11.9",
     "solid-js": "1.9.11",
-    "solid-sileo": "file:../../packages/sileo",
+    "solid-sileo": "workspace:*",
     "vike": "^0.4.253",
     "vike-metadata-solid": "^1.0.5",
     "vike-photon": "^0.1.24",
