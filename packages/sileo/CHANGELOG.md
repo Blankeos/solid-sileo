@@ -1,5 +1,11 @@
 # solid-sileo
 
+## 0.1.1
+
+### Patch Changes
+
+- [`286c05f`](https://github.com/Blankeos/solid-sileo/commit/286c05f96452fcc1fab1ddc4603e13092f020d87) Thanks [@Blankeos](https://github.com/Blankeos)! - feat: upgraded to motion (same as the react upstream).
+
 ## 0.1.0
 
 ### Minor Changes
