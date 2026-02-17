@@ -14,8 +14,7 @@
     "target": "ES2022",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "paths": {
-      "@/*": ["./src/*"],
-      "solid-sileo": ["../../packages/sileo/src/index.ts"]
+      "@/*": ["./src/*"]
     },
     "types": [
       "@types/bun", // Remove when Node

@@ -1,5 +1,5 @@
 import { createSignal, For, onCleanup } from "solid-js"
-import { sileo } from "solid-sileo"
+import { sileo } from "../../../../../packages/sileo/src/index"
 import { useMetadata } from "vike-metadata-solid"
 
 const INSTALL_COMMAND = "npm install sileo"

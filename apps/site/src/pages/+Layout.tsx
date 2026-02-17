@@ -1,5 +1,5 @@
 import type { FlowProps } from "solid-js"
-import { Toaster } from "solid-sileo"
+import { Toaster } from "../../../../packages/sileo/src/index"
 import { useMetadata } from "vike-metadata-solid"
 import { Nav } from "@/components/nav"
 import { ThemeContextProvider, themeInitScript, useThemeContext } from "@/contexts/theme.context"

@@ -1,5 +1,5 @@
 import { createSignal, For } from "solid-js"
-import { sileo } from "solid-sileo"
+import { sileo } from "../../../../../packages/sileo/src/index"
 import { useMetadata } from "vike-metadata-solid"
 
 const POSITIONS = [
