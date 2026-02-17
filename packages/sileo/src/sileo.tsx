@@ -1,5 +1,5 @@
-import { animate, type JSAnimation } from "animejs/animation";
-import { spring } from "animejs/easings/spring";
+import { spring } from "motion";
+import { animate } from "motion/mini";
 import {
 	createEffect,
 	createMemo,
@@ -27,6 +27,7 @@ const HEIGHT = 40;
 const WIDTH = 350;
 const DEFAULT_ROUNDNESS = 18;
 const DURATION_MS = 600;
+const DURATION_S = DURATION_MS / 1000;
 const BLUR_RATIO = 0.5;
 const PILL_PADDING = 10;
 const MIN_EXPAND_RATIO = 2.25;
@@ -167,8 +168,8 @@ export function Sileo(props: SileoProps) {
 	let autoExpandTimer: number | undefined;
 	let autoCollapseTimer: number | undefined;
 	let swapTimer: number | undefined;
-	let pillAnimation: JSAnimation | undefined;
-	let bodyAnimation: JSAnimation | undefined;
+	let pillAnimation: ReturnType<typeof animate> | undefined;
+	let bodyAnimation: ReturnType<typeof animate> | undefined;
 	let headerPad: number | null = null;
 	let lastRefreshKey = props.refreshKey;
 	let pending: { key?: string; payload: View } | null = null;
@@ -404,31 +405,38 @@ export function Sileo(props: SileoProps) {
 
 		const isExpanded = open();
 		const immediate = !ready();
-		const duration = immediate ? 0 : DURATION_MS;
-		const pillEase = immediate
-			? "linear"
-			: spring({ bounce: 0.25, duration: DURATION_MS });
-		const bodyEase = immediate
-			? "linear"
-			: spring({ bounce: isExpanded ? 0.25 : 0, duration: DURATION_MS });
+		const pillTransition = immediate
+			? { duration: 0 }
+			: { type: spring, bounce: 0.25, duration: DURATION_S };
+		const bodyTransition = immediate
+			? { duration: 0 }
+			: {
+					type: spring,
+					bounce: isExpanded ? 0.25 : 0,
+					duration: DURATION_S,
+				};
 
-		pillAnimation?.cancel();
-		bodyAnimation?.cancel();
+		pillAnimation?.stop();
+		bodyAnimation?.stop();
 
-		pillAnimation = animate(pill, {
-			x: pillX(),
-			width: resolvedPillWidth(),
-			height: isExpanded ? pillHeight() : HEIGHT,
-			duration,
-			ease: pillEase,
-		});
+		pillAnimation = animate(
+			pill,
+			{
+				x: pillX(),
+				width: resolvedPillWidth(),
+				height: isExpanded ? pillHeight() : HEIGHT,
+			},
+			pillTransition,
+		);
 
-		bodyAnimation = animate(body, {
-			height: isExpanded ? expandedContent() : 0,
-			opacity: isExpanded ? 1 : 0,
-			duration,
-			ease: bodyEase,
-		});
+		bodyAnimation = animate(
+			body,
+			{
+				height: isExpanded ? expandedContent() : 0,
+				opacity: isExpanded ? 1 : 0,
+			},
+			bodyTransition,
+		);
 	});
 
 	const canvasStyle = createMemo<JSX.CSSProperties>(() => ({
@@ -529,8 +537,8 @@ export function Sileo(props: SileoProps) {
 		if (autoExpandTimer !== undefined) clearTimeout(autoExpandTimer);
 		if (autoCollapseTimer !== undefined) clearTimeout(autoCollapseTimer);
 		if (swapTimer !== undefined) clearTimeout(swapTimer);
-		pillAnimation?.cancel();
-		bodyAnimation?.cancel();
+		pillAnimation?.stop();
+		bodyAnimation?.stop();
 	});
 
 	return (

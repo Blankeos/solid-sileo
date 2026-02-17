@@ -59,6 +59,6 @@
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"animejs": "^4.3.6"
+		"motion": "^12.34.1"
 	}
 }
