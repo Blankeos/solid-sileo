@@ -1,5 +1,4 @@
-import { spring } from "motion";
-import { animate } from "motion/mini";
+import { animate, spring } from "motion";
 import {
 	createEffect,
 	createMemo,
@@ -182,10 +181,9 @@ export function Sileo(props: SileoProps) {
 	}>({ current: { key: headerKey(), view: view() }, prev: null });
 
 	createRenderEffect(() => {
-		const key = headerLayer().current.key;
 		const el = innerRef();
 		const header = headerRef();
-		if (!key || !el || !header) return;
+		if (!el || !header) return;
 
 		if (headerPad === null) {
 			const styles = getComputedStyle(header);
@@ -421,7 +419,7 @@ export function Sileo(props: SileoProps) {
 			? { duration: 0 }
 			: {
 					type: spring,
-					bounce: isExpanded ? 0.25 : 0,
+					bounce: 0.25,
 					duration: DURATION_S,
 				};
 		const bodyTransition = immediate
@@ -591,9 +589,9 @@ export function Sileo(props: SileoProps) {
 					<rect
 						ref={setPillRef}
 						data-sileo-pill
-						x={pillX()}
-						width={resolvedPillWidth()}
-						height={open() ? pillHeight() : HEIGHT}
+						x={0}
+						width={HEIGHT}
+						height={HEIGHT}
 						rx={resolvedRoundness()}
 						ry={resolvedRoundness()}
 						fill={view().fill}
@@ -603,8 +601,8 @@ export function Sileo(props: SileoProps) {
 						data-sileo-body
 						y={HEIGHT}
 						width={WIDTH}
-						height={open() ? expandedContent() : 0}
-						opacity={open() ? 1 : 0}
+						height={0}
+						opacity={0}
 						rx={resolvedRoundness()}
 						ry={resolvedRoundness()}
 						fill={view().fill}
