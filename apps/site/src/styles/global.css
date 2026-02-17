@@ -8,10 +8,10 @@
   --font-mono: "Geist Mono", Menlo, Monaco, monospace;
 
   /* Light theme (default) */
-  --color-background: #fafafa;
-  --color-foreground: #171717;
-  --color-border: #e5e5e5;
-  --color-muted-foreground: #737373;
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+  --color-border: #f0f0f0;
+  --color-muted-foreground: #a3a3a3;
   --color-foreground-hover: #0a0a0a;
   --color-accent: #f5f5f5;
   --color-accent-hover: #e5e5e5;
@@ -24,13 +24,13 @@
 
   .dark {
     color-scheme: dark;
-    --color-background: #0b0d12;
-    --color-foreground: #edf1f7;
-    --color-border: #1f2632;
-    --color-muted-foreground: #8f9aae;
-    --color-foreground-hover: #f8fbff;
-    --color-accent: #141a23;
-    --color-accent-hover: #1d2530;
+    --color-background: #0a0a0a;
+    --color-foreground: #fafafa;
+    --color-border: #1a1a1a;
+    --color-muted-foreground: #737373;
+    --color-foreground-hover: #fafafa;
+    --color-accent: #262626;
+    --color-accent-hover: #404040;
   }
 
   * {
@@ -43,24 +43,6 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-  }
-
-  .dark body {
-    background-image:
-      radial-gradient(
-        70rem 30rem at 50% -22rem,
-        color-mix(in oklch, #4f6e9e 30%, transparent),
-        transparent 65%
-      ),
-      radial-gradient(
-        40rem 20rem at 50% 120%,
-        color-mix(in oklch, #273246 35%, transparent),
-        transparent 70%
-      );
-  }
-
-  :root:not(.dark) body {
-    background-image: none;
   }
 
   a {

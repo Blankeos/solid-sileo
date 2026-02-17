@@ -1,8 +1,8 @@
 import type { FlowProps } from "solid-js"
-import { Toaster } from "../../../../packages/sileo/src/index"
 import { useMetadata } from "vike-metadata-solid"
 import { Nav } from "@/components/nav"
 import { ThemeContextProvider, themeInitScript, useThemeContext } from "@/contexts/theme.context"
+import { Toaster } from "../../../../packages/sileo/src/index"
 import "@/styles/global.css"
 
 useMetadata.setGlobalDefaults({
@@ -31,16 +31,11 @@ function LayoutWithToaster(props: FlowProps) {
   return (
     <Toaster
       position="top-center"
-      offset={{ top: 18, right: 18 }}
+      offset={8}
       options={{
-        fill: inferredTheme() === "dark" ? "#10151f" : "#ffffff",
-        roundness: 18,
-        autopilot: true,
+        fill: inferredTheme() === "dark" ? "#ffffff" : "#171717",
         styles: {
-          title: inferredTheme() === "dark" ? "text-[#f0f5fc]" : "text-gray-900",
-          description: inferredTheme() === "dark" ? "text-[#9aa9bf]" : "text-gray-600",
-          badge: inferredTheme() === "dark" ? "text-[#d8e2f0]" : "text-gray-700",
-          button: inferredTheme() === "dark" ? "text-[#d8e2f0]" : "text-gray-700",
+          description: inferredTheme() === "dark" ? "text-black/60!" : "text-white/75!",
         },
       }}
     >

@@ -1,6 +1,7 @@
 import { createSignal, For, onCleanup } from "solid-js"
-import { sileo } from "../../../../../packages/sileo/src/index"
 import { useMetadata } from "vike-metadata-solid"
+import { fireDemoToast, HOMEPAGE_TOAST_BUTTONS } from "@/lib/toast-presets"
+import { sileo } from "../../../../../packages/sileo/src/index"
 
 const INSTALL_COMMAND = "npm install sileo"
 const DESCRIPTION =
@@ -36,8 +37,7 @@ export default function Page() {
       }, 1400)
 
       sileo.success({
-        title: "Copied",
-        description: "Installation command copied to clipboard.",
+        title: "Copied to clipboard",
       })
     } catch {
       sileo.error({
@@ -47,116 +47,10 @@ export default function Page() {
     }
   }
 
-  const triggerPromiseToast = () => {
-    void sileo.promise(
-      () =>
-        new Promise<string>((resolve, reject) => {
-          window.setTimeout(() => {
-            if (Math.random() > 0.2) {
-              resolve("Deployment complete.")
-            } else {
-              reject(new Error("Transient failure"))
-            }
-          }, 1200)
-        }),
-      {
-        loading: { title: "Loading..." },
-        success: (message) => ({
-          title: "Done!",
-          description: message,
-        }),
-        error: () => ({
-          title: "Failed",
-          description: "Please try again in a moment.",
-        }),
-      }
-    )
-  }
-
-  const openMenuHint = () => {
-    sileo.info({
-      title: "Menu",
-      description: "This demo keeps navigation intentionally minimal.",
-    })
-  }
-
-  const tryItButtons = [
-    {
-      label: "Success",
-      onClick: () =>
-        sileo.success({
-          title: "Changes saved",
-        }),
-    },
-    {
-      label: "Error",
-      onClick: () =>
-        sileo.error({
-          title: "Something went wrong",
-          description: "Please try again later.",
-        }),
-    },
-    {
-      label: "Warning",
-      onClick: () =>
-        sileo.warning({
-          title: "Storage almost full",
-        }),
-    },
-    {
-      label: "Info",
-      onClick: () =>
-        sileo.info({
-          title: "New update available",
-        }),
-    },
-    {
-      label: "Action",
-      onClick: () =>
-        sileo.action({
-          title: "File uploaded",
-          description: "Share it with your team?",
-          button: {
-            title: "Share",
-            onClick: () => {
-              sileo.success({
-                title: "Shared!",
-                description: "The file link is now ready to send.",
-              })
-            },
-          },
-        }),
-    },
-    {
-      label: "Promise",
-      onClick: triggerPromiseToast,
-    },
-    {
-      label: "Icon",
-      onClick: () =>
-        sileo.show({
-          title: "Custom icon",
-          description: "Bring your own icon for special toast states.",
-          icon: (
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <title>Diamond icon</title>
-              <path d="m6 3 6 7-6 11-4-8 4-10Z" />
-              <path d="m18 3-6 7 6 11 4-8-4-10Z" />
-              <path d="M8 13h8" />
-            </svg>
-          ),
-        }),
-    },
-  ]
+  const tryItButtons = HOMEPAGE_TOAST_BUTTONS.map((button) => ({
+    label: button.label,
+    onClick: () => fireDemoToast(button.type),
+  }))
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { createSignal, For } from "solid-js"
-import { sileo } from "../../../../../packages/sileo/src/index"
 import { useMetadata } from "vike-metadata-solid"
+import { fireDemoToast, PLAYGROUND_TOAST_BUTTONS } from "@/lib/toast-presets"
 
 const POSITIONS = [
   "top-left",
@@ -13,16 +13,6 @@ const POSITIONS = [
 
 type Position = (typeof POSITIONS)[number]
 
-const TOAST_TYPES = [
-  { label: "Success", state: "success" as const },
-  { label: "Error", state: "error" as const },
-  { label: "Warning", state: "warning" as const },
-  { label: "Info", state: "info" as const },
-  { label: "Action", state: "action" as const },
-  { label: "Icon", state: "icon" as const },
-  { label: "Promise", state: "promise" as const },
-]
-
 export default function Page() {
   useMetadata({
     title: "Playground | Sileo",
@@ -30,105 +20,6 @@ export default function Page() {
   })
 
   const [selectedPosition, setSelectedPosition] = createSignal<Position>("top-center")
-
-  const triggerToast = (type: string) => {
-    const position = selectedPosition()
-
-    switch (type) {
-      case "success":
-        sileo.success({
-          title: "Changes saved",
-          position,
-        })
-        break
-      case "error":
-        sileo.error({
-          title: "Something went wrong",
-          description: "Please try again later.",
-          position,
-        })
-        break
-      case "warning":
-        sileo.warning({
-          title: "Storage almost full",
-          position,
-        })
-        break
-      case "info":
-        sileo.info({
-          title: "New update available",
-          position,
-        })
-        break
-      case "action":
-        sileo.action({
-          title: "File uploaded",
-          description: "Share it with your team?",
-          position,
-          button: {
-            title: "Share",
-            onClick: () => {
-              sileo.success({
-                title: "Shared!",
-                description: "The file link is now ready to send.",
-              })
-            },
-          },
-        })
-        break
-      case "icon":
-        sileo.show({
-          title: "Custom icon",
-          description: "Bring your own icon for special toast states.",
-          position,
-          icon: (
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <title>Diamond icon</title>
-              <path d="m6 3 6 7-6 11-4-8 4-10Z" />
-              <path d="m18 3-6 7 6 11 4-8-4-10Z" />
-              <path d="M8 13h8" />
-            </svg>
-          ),
-        })
-        break
-      case "promise":
-        void sileo.promise(
-          () =>
-            new Promise<string>((resolve, reject) => {
-              window.setTimeout(() => {
-                if (Math.random() > 0.2) {
-                  resolve("Deployment complete.")
-                } else {
-                  reject(new Error("Transient failure"))
-                }
-              }, 1200)
-            }),
-          {
-            loading: { title: "Loading..." },
-            success: (message) => ({
-              title: "Done!",
-              description: message,
-              position,
-            }),
-            error: () => ({
-              title: "Failed",
-              description: "Please try again in a moment.",
-              position,
-            }),
-          }
-        )
-        break
-    }
-  }
 
   return (
     <>
@@ -165,11 +56,11 @@ export default function Page() {
           <div class="my-4 w-[80%] border-border border-t border-dashed" />
 
           <div class="flex flex-wrap items-center justify-center gap-2 px-6">
-            <For each={TOAST_TYPES}>
+            <For each={PLAYGROUND_TOAST_BUTTONS}>
               {(type) => (
                 <button
                   type="button"
-                  onClick={() => triggerToast(type.state)}
+                  onClick={() => fireDemoToast(type.type, selectedPosition())}
                   class="inline-flex h-9 cursor-pointer items-center justify-center rounded-xl bg-accent px-4 font-medium text-muted-foreground text-xs transition-all hover:bg-accent-hover hover:text-foreground active:scale-95"
                 >
                   {type.label}

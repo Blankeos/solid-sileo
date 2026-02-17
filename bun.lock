@@ -17,7 +17,6 @@
         "bagon-hooks": "^0.0.6",
         "hono": "^4.11.9",
         "solid-js": "1.9.11",
-        "solid-sileo": "workspace:*",
         "vike": "^0.4.253",
         "vike-metadata-solid": "^1.0.5",
         "vike-photon": "^0.1.24",
@@ -37,6 +36,9 @@
     "packages/sileo": {
       "name": "solid-sileo",
       "version": "0.1.0",
+      "dependencies": {
+        "animejs": "^4.3.6",
+      },
       "devDependencies": {
         "rolldown": "^0.15.1",
         "rolldown-plugin-solid": "^0.2.1",
@@ -434,6 +436,8 @@
     "acorn-import-attributes": ["acorn-import-attributes@1.9.5", "", { "peerDependencies": { "acorn": "^8" } }, "sha512-n02Vykv5uA3eHGM/Z2dQrcD56kL8TyDb2p1+0P83PClMnC/nc+anbQRhIOWnSq4Ke/KvDPrY3C9hDtC/A3eHnQ=="],
 
     "agent-base": ["agent-base@7.1.4", "", {}, "sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ=="],
+
+    "animejs": ["animejs@4.3.6", "", {}, "sha512-rzZ4bDc8JAtyx6hYwxj7s5M/yWfnM5qqY4hZDnhy1cWFvMb6H5/necHS2sbCY3WQTDbRLuZL10dPXSxSCFOr/w=="],
 
     "ansi-colors": ["ansi-colors@4.1.3", "", {}, "sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw=="],
 

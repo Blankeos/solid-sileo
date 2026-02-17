@@ -1,3 +1,5 @@
+import { animate, type JSAnimation } from "animejs/animation";
+import { spring } from "animejs/easings/spring";
 import {
 	createEffect,
 	createMemo,
@@ -24,11 +26,12 @@ import "./styles.css";
 const HEIGHT = 40;
 const WIDTH = 350;
 const DEFAULT_ROUNDNESS = 18;
+const DURATION_MS = 600;
 const BLUR_RATIO = 0.5;
 const PILL_PADDING = 10;
 const MIN_EXPAND_RATIO = 2.25;
 const SWAP_COLLAPSE_MS = 200;
-const HEADER_EXIT_MS = 150;
+const HEADER_EXIT_MS = DURATION_MS * 0.7;
 const SWIPE_DISMISS = 30;
 const SWIPE_MAX = 20;
 
@@ -157,11 +160,15 @@ export function Sileo(props: SileoProps) {
 	const [contentRef, setContentRef] = createSignal<HTMLDivElement>();
 	const [innerRef, setInnerRef] = createSignal<HTMLDivElement>();
 	const [buttonRef, setButtonRef] = createSignal<HTMLButtonElement>();
+	const [pillRef, setPillRef] = createSignal<SVGRectElement>();
+	const [bodyRef, setBodyRef] = createSignal<SVGRectElement>();
 
 	let headerExitTimer: number | undefined;
 	let autoExpandTimer: number | undefined;
 	let autoCollapseTimer: number | undefined;
 	let swapTimer: number | undefined;
+	let pillAnimation: JSAnimation | undefined;
+	let bodyAnimation: JSAnimation | undefined;
 	let headerPad: number | null = null;
 	let lastRefreshKey = props.refreshKey;
 	let pending: { key?: string; payload: View } | null = null;
@@ -390,15 +397,50 @@ export function Sileo(props: SileoProps) {
 		return 0;
 	});
 
+	createRenderEffect(() => {
+		const pill = pillRef();
+		const body = bodyRef();
+		if (!pill || !body) return;
+
+		const isExpanded = open();
+		const immediate = !ready();
+		const duration = immediate ? 0 : DURATION_MS;
+		const pillEase = immediate
+			? "linear"
+			: spring({ bounce: 0.25, duration: DURATION_MS });
+		const bodyEase = immediate
+			? "linear"
+			: spring({ bounce: isExpanded ? 0.25 : 0, duration: DURATION_MS });
+
+		pillAnimation?.cancel();
+		bodyAnimation?.cancel();
+
+		pillAnimation = animate(pill, {
+			x: pillX(),
+			width: resolvedPillWidth(),
+			height: isExpanded ? pillHeight() : HEIGHT,
+			duration,
+			ease: pillEase,
+		});
+
+		bodyAnimation = animate(body, {
+			height: isExpanded ? expandedContent() : 0,
+			opacity: isExpanded ? 1 : 0,
+			duration,
+			ease: bodyEase,
+		});
+	});
+
+	const canvasStyle = createMemo<JSX.CSSProperties>(() => ({
+		filter: `url(#${filterId()})`,
+	}));
+
 	const rootStyle = createMemo(() => {
 		const expand = props.expand ?? "bottom";
 		return {
 			"--_h": `${open() ? expanded() : HEIGHT}px`,
 			"--_pw": `${resolvedPillWidth()}px`,
 			"--_px": `${pillX()}px`,
-			"--_sy": `${open() ? 1 : HEIGHT / pillHeight()}`,
-			"--_ph": `${pillHeight()}px`,
-			"--_by": `${open() ? 1 : 0}`,
 			"--_ht": `translateY(${open() ? (expand === "bottom" ? 3 : -3) : 0}px) scale(${open() ? 0.9 : 1})`,
 			"--_co": `${open() ? 1 : 0}`,
 		} as JSX.CSSProperties;
@@ -487,6 +529,8 @@ export function Sileo(props: SileoProps) {
 		if (autoExpandTimer !== undefined) clearTimeout(autoExpandTimer);
 		if (autoCollapseTimer !== undefined) clearTimeout(autoCollapseTimer);
 		if (swapTimer !== undefined) clearTimeout(swapTimer);
+		pillAnimation?.cancel();
+		bodyAnimation?.cancel();
 	});
 
 	return (
@@ -507,7 +551,11 @@ export function Sileo(props: SileoProps) {
 			onTransitionEnd={handleTransitionEnd}
 			onPointerDown={handlePointerDown}
 		>
-			<div data-sileo-canvas data-edge={props.expand ?? "bottom"}>
+			<div
+				data-sileo-canvas
+				data-edge={props.expand ?? "bottom"}
+				style={canvasStyle()}
+			>
 				<svg
 					data-sileo-svg
 					width={WIDTH}
@@ -516,24 +564,27 @@ export function Sileo(props: SileoProps) {
 				>
 					<title>Sileo Notification</title>
 					<GooeyDefs filterId={filterId()} blur={blur()} />
-					<g filter={`url(#${filterId()})`}>
-						<rect
-							data-sileo-pill
-							x={pillX()}
-							rx={resolvedRoundness()}
-							ry={resolvedRoundness()}
-							fill={view().fill}
-						/>
-						<rect
-							data-sileo-body
-							y={HEIGHT}
-							width={WIDTH}
-							height={expandedContent()}
-							rx={resolvedRoundness()}
-							ry={resolvedRoundness()}
-							fill={view().fill}
-						/>
-					</g>
+					<rect
+						ref={setPillRef}
+						data-sileo-pill
+						x={pillX()}
+						width={resolvedPillWidth()}
+						height={open() ? pillHeight() : HEIGHT}
+						rx={resolvedRoundness()}
+						ry={resolvedRoundness()}
+						fill={view().fill}
+					/>
+					<rect
+						ref={setBodyRef}
+						data-sileo-body
+						y={HEIGHT}
+						width={WIDTH}
+						height={open() ? expandedContent() : 0}
+						opacity={open() ? 1 : 0}
+						rx={resolvedRoundness()}
+						ry={resolvedRoundness()}
+						fill={view().fill}
+					/>
 				</svg>
 			</div>
 
@@ -543,8 +594,8 @@ export function Sileo(props: SileoProps) {
 				data-edge={props.expand ?? "bottom"}
 			>
 				<div data-sileo-header-stack>
-					<Show keyed when={headerLayer().current}>
-						{(current) => (
+					<Show keyed when={headerLayer().current.key}>
+						{(_key) => (
 							<div
 								ref={setInnerRef}
 								data-sileo-header-inner
@@ -552,17 +603,18 @@ export function Sileo(props: SileoProps) {
 							>
 								<div
 									data-sileo-badge
-									data-state={current.view.state}
-									class={current.view.styles?.badge}
+									data-state={headerLayer().current.view.state}
+									class={headerLayer().current.view.styles?.badge}
 								>
-									{current.view.icon ?? STATE_ICON[current.view.state]}
+									{headerLayer().current.view.icon ??
+										STATE_ICON[headerLayer().current.view.state]}
 								</div>
 								<span
 									data-sileo-title
-									data-state={current.view.state}
-									class={current.view.styles?.title}
+									data-state={headerLayer().current.view.state}
+									class={headerLayer().current.view.styles?.title}
 								>
-									{current.view.title}
+									{headerLayer().current.view.title}
 								</span>
 							</div>
 						)}

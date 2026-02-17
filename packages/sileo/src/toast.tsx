@@ -399,45 +399,60 @@ export function Toaster(props: SileoToasterProps) {
 			{props.children}
 			<For each={SILEO_POSITIONS}>
 				{(pos) => {
-					const items = () => byPosition()[pos] ?? [];
+					const items = createMemo(() => byPosition()[pos] ?? []);
+					const itemIds = createMemo(() => items().map((toast) => toast.id));
+					const itemsById = createMemo(() => {
+						const map = new Map<string, SileoItem>();
+						for (const toast of items()) {
+							map.set(toast.id, toast);
+						}
+						return map;
+					});
 					const pill = pillAlign(pos);
 					const expand = expandDir(pos);
 
 					return (
-						<Show when={items().length > 0}>
+						<Show when={itemIds().length > 0}>
 							<section
 								data-sileo-viewport
 								data-position={pos}
 								aria-live="polite"
 								style={getViewportStyle(pos)}
 							>
-								<For each={items()}>
-									{(item) => {
-										const handlers = getHandlers(item.id);
+								<For each={itemIds()}>
+									{(toastId) => {
+										const item = createMemo(() => itemsById().get(toastId));
+										const handlers = getHandlers(toastId);
+
 										return (
-											<Sileo
-												id={item.id}
-												state={item.state}
-												title={item.title}
-												description={item.description}
-												position={pill}
-												expand={expand}
-												icon={item.icon}
-												fill={item.fill}
-												styles={item.styles}
-												button={item.button}
-												roundness={item.roundness}
-												exiting={item.exiting}
-												autoExpandDelayMs={item.autoExpandDelayMs}
-												autoCollapseDelayMs={item.autoCollapseDelayMs}
-												refreshKey={item.instanceId}
-												canExpand={
-													activeId() === undefined || activeId() === item.id
-												}
-												onMouseEnter={handlers.enter}
-												onMouseLeave={handlers.leave}
-												onDismiss={handlers.dismiss}
-											/>
+											<Show when={item()}>
+												{(current) => (
+													<Sileo
+														id={current().id}
+														state={current().state}
+														title={current().title}
+														description={current().description}
+														position={pill}
+														expand={expand}
+														icon={current().icon}
+														fill={current().fill}
+														styles={current().styles}
+														button={current().button}
+														roundness={current().roundness}
+														exiting={current().exiting}
+														autoExpandDelayMs={current().autoExpandDelayMs}
+														autoCollapseDelayMs={current().autoCollapseDelayMs}
+														refreshKey={current().instanceId}
+														canExpand={
+															activeId() === undefined ||
+															activeId() === current().id
+														}
+														onMouseEnter={handlers.enter}
+														onMouseLeave={handlers.leave}
+														onDismiss={handlers.dismiss}
+													/>
+												)}
+											</Show>
 										);
 									}}
 								</For>
