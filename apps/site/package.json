@@ -27,6 +27,7 @@
     "@photonjs/hono": "^0.1.12",
     "bagon-hooks": "^0.0.6",
     "hono": "^4.11.9",
+    "motion": "^12.34.1",
     "solid-js": "1.9.11",
     "vike": "^0.4.253",
     "vike-metadata-solid": "^1.0.5",
