@@ -1,29 +1,32 @@
-<div align="center">
-  <h1>Sileo</h1>
-  <p>An opinionated, physics-based toast component for React.</p>
-  <p><a href="https://sileo.aaryan.design">Try Out</a> &nbsp; / &nbsp; <a href="https://sileo.aaryan.design/docs">Docs</a></p>
-  <video src="https://github.com/user-attachments/assets/a292d310-9189-490a-9f9d-d0a1d09defce"></video>
-</div>
+# Sileo Monorepo
 
-### Installation
+This repository now contains:
+
+- `packages/sileo`: the `solid-sileo` SolidJS toast library package.
+- `apps/site`: a Vike + Vike Solid app for local testing.
+
+## Quick Start
 
 ```bash
-npm i sileo
+bun install
+bun run dev:site
 ```
 
-### Getting Started
+## Workspace Scripts
 
-```tsx
-import { sileo, Toaster } from "sileo";
-
-export default function App() {
-  return (
-    <>
-      <Toaster position="top-right" />
-      <YourApp />
-    </>
-  );
-}
+```bash
+bun run build
+bun run build:site
+bun run check
+bun run lint
 ```
 
-For detailed docs, click here: https://sileo.aaryan.design
+## Publishing
+
+This repo uses Changesets.
+
+```bash
+bun run changeset
+bun run version-packages
+bun run release
+```

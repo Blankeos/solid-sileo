@@ -1,40 +1,29 @@
 {
-	"name": "sileo",
-	"version": "0.1.0",
-	"description": "An opinionated, physics based toast notification library for react.",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/hiaaryan/sileo.git"
-	},
-	"exports": {
-		".": {
-			"import": {
-				"types": "./dist/index.d.mts",
-				"default": "./dist/index.mjs"
-			},
-			"require": {
-				"types": "./dist/index.d.ts",
-				"default": "./dist/index.js"
-			},
-			"default": "./dist/index.js"
-		},
-		"./styles.css": "./dist/styles.css"
-	},
-	"main": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"files": [
-		"dist"
-	],
+	"name": "sileo-monorepo",
+	"private": true,
+	"type": "module",
 	"scripts": {
-		"build": "rm -rf dist && bunchee && cp src/styles.css dist/styles.css",
-		"dev": "bunchee --watch"
+		"dev": "bun run --filter site dev",
+		"dev:site": "bun run --filter site dev",
+		"build": "bun run --filter solid-sileo build",
+		"build:site": "bun run --filter solid-sileo build && bun run --filter site build",
+		"preview:site": "bun run --filter site preview",
+		"check": "bun run --filter '*' check",
+		"lint": "bun run --filter '*' lint",
+		"lint:fix": "bun run --filter '*' lint:fix",
+		"changeset": "changeset",
+		"version-packages": "changeset version",
+		"release": "changeset publish",
+		"clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules"
 	},
-	"peerDependencies": {
-		"react": ">=18",
-		"react-dom": ">=18"
+	"workspaces": {
+		"packages": [
+			"apps/*",
+			"packages/*"
+		]
 	},
 	"devDependencies": {
-		"bunchee": "^6.9.4"
+		"@changesets/changelog-github": "^0.5.2",
+		"@changesets/cli": "^2.29.8"
 	}
 }

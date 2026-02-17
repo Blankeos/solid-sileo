@@ -1,5 +1,3 @@
-"use client";
-
 import "./styles.css";
 
 export { sileo, Toaster } from "./toast";

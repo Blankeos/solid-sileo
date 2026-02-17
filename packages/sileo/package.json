@@ -1,0 +1,61 @@
+{
+	"name": "solid-sileo",
+	"version": "0.1.0",
+	"description": "An opinionated, physics-based toast notification library for SolidJS.",
+	"license": "MIT",
+	"type": "module",
+	"author": "Blankeos",
+	"contributors": [
+		{
+			"name": "Aaryan",
+			"url": "https://github.com/hiaaryan"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Blankeos/sileo.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Blankeos/sileo/issues"
+	},
+	"homepage": "https://github.com/Blankeos/sileo#readme",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			},
+			"default": "./dist/index.js"
+		},
+		"./styles.css": "./dist/styles.css"
+	},
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"sideEffects": [
+		"./dist/styles.css"
+	],
+	"scripts": {
+		"build": "tsdown",
+		"dev": "tsdown --watch",
+		"check": "tsc --noemit",
+		"lint": "biome check src",
+		"lint:fix": "biome check --write src"
+	},
+	"peerDependencies": {
+		"solid-js": "^1.9.0"
+	},
+	"devDependencies": {
+		"rolldown": "1.0.0-rc.3",
+		"rolldown-plugin-solid": "^0.2.1",
+		"tsdown": "^0.20.3",
+		"typescript": "^5.9.3"
+	}
+}

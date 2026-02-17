@@ -1,26 +1,31 @@
-import type { ReactNode, SVGProps } from "react";
+import { type JSX, splitProps } from "solid-js";
 
-const Icon = ({
-	title,
-	children,
-	...props
-}: SVGProps<SVGSVGElement> & { title: string; children: ReactNode }) => (
-	<svg
-		{...props}
-		xmlns="http://www.w3.org/2000/svg"
-		width="16"
-		height="16"
-		viewBox="0 0 24 24"
-		fill="none"
-		stroke="currentColor"
-		strokeWidth="2"
-		strokeLinecap="round"
-		strokeLinejoin="round"
-	>
-		<title>{title}</title>
-		{children}
-	</svg>
-);
+const Icon = (
+	props: JSX.SvgSVGAttributes<SVGSVGElement> & {
+		title: string;
+		children: JSX.Element;
+	},
+) => {
+	const [local, svgProps] = splitProps(props, ["title", "children"]);
+
+	return (
+		<svg
+			{...svgProps}
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		>
+			<title>{local.title}</title>
+			{local.children}
+		</svg>
+	);
+};
 
 export const ArrowRight = () => (
 	<Icon title="Arrow Right">
@@ -40,7 +45,7 @@ export const LifeBuoy = () => (
 	</Icon>
 );
 
-export const LoaderCircle = (props: SVGProps<SVGSVGElement>) => (
+export const LoaderCircle = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
 	<Icon title="Loader Circle" {...props}>
 		<path d="M21 12a9 9 0 1 1-6.219-8.56" />
 	</Icon>

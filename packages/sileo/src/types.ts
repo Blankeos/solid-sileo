@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { JSX } from "solid-js";
 
 export type SileoState =
 	| "success"
@@ -33,10 +33,10 @@ export type SileoPosition = (typeof SILEO_POSITIONS)[number];
 
 export interface SileoOptions {
 	title?: string;
-	description?: ReactNode | string;
+	description?: JSX.Element;
 	position?: SileoPosition;
 	duration?: number | null;
-	icon?: ReactNode | null;
+	icon?: JSX.Element | null;
 	styles?: SileoStyles;
 	fill?: string;
 	roundness?: number;
