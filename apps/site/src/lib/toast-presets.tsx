@@ -9,7 +9,10 @@ export type DemoToastType =
   | "promise"
   | "custom-icon"
 
-export const HOMEPAGE_TOAST_BUTTONS: Array<{ label: string; type: DemoToastType }> = [
+export const HOMEPAGE_TOAST_BUTTONS: Array<{
+  label: string
+  type: DemoToastType
+}> = [
   { label: "Success", type: "success" },
   { label: "Error", type: "error" },
   { label: "Warning", type: "warning" },
@@ -19,7 +22,10 @@ export const HOMEPAGE_TOAST_BUTTONS: Array<{ label: string; type: DemoToastType 
   { label: "Icon", type: "custom-icon" },
 ]
 
-export const PLAYGROUND_TOAST_BUTTONS: Array<{ label: string; type: DemoToastType }> = [
+export const PLAYGROUND_TOAST_BUTTONS: Array<{
+  label: string
+  type: DemoToastType
+}> = [
   { label: "Success", type: "success" },
   { label: "Error", type: "error" },
   { label: "Warning", type: "warning" },
@@ -84,17 +90,82 @@ const RocketIcon = () => (
   </svg>
 )
 
+const UnitedLogo = () => (
+  <img
+    src="https://sileo.aaryan.design/united.png"
+    alt="United Airlines"
+    width="70"
+    height="28"
+    class="-ml-1.5 h-7.5 w-auto object-contain invert-0 dark:invert"
+  />
+)
+
+const ArrowRight = (props: { class?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class={props.class}
+    aria-hidden="true"
+  >
+    <path d="M5 12h14" />
+    <path d="m12 5 7 7-7 7" />
+  </svg>
+)
+
 function FlightBookingDescription() {
   return (
-    <div class="flex flex-col gap-2 text-[13px]">
-      <div class="flex items-center justify-between leading-none">
-        <span class="font-medium tracking-tight">United Airlines</span>
-        <span class="opacity-60">PNR EC2QW4</span>
+    <div class="-mt-1.5 flex flex-col gap-4">
+      <div class="-mb-4 flex items-center justify-between">
+        <UnitedLogo />
+        <div class="font-medium text-[13px] leading-none tracking-tight opacity-50">
+          PNR <span class="text-white dark:text-black">EC2QW4</span>
+        </div>
       </div>
-      <div class="flex items-center justify-between font-medium text-lg leading-none tracking-tight">
-        <span>DEL</span>
-        <span class="text-[11px] opacity-60">to</span>
-        <span>SFO</span>
+
+      <div class="flex items-center justify-between overflow-visible">
+        <span class="mt-4 font-medium text-2xl text-white leading-none tracking-tight dark:text-black">
+          DEL
+        </span>
+
+        <div class="relative mx-1 flex max-h-[10px] flex-1 items-center overflow-visible">
+          <svg
+            viewBox="0 0 300 120"
+            fill="none"
+            preserveAspectRatio="none"
+            class="mask-x-from-77% mask-x-to-87% absolute inset-x-0 bottom-0 -mb-5 h-[80px] w-full overflow-visible"
+          >
+            <title>Flight path</title>
+            <path
+              d="M 4 118 Q 150 -20 296 118"
+              stroke="#22c55e"
+              stroke-width="2"
+              stroke-dasharray="6 4"
+              stroke-opacity="0.5"
+              fill="none"
+              vector-effect="non-scaling-stroke"
+              shape-rendering="geometricPrecision"
+            ></path>
+          </svg>
+
+          <div class="absolute bottom-[-1rem] left-3 z-10 flex size-5 items-center justify-center rounded-full bg-green-500/30">
+            <ArrowRight class="size-4 -rotate-40 text-green-500" />
+          </div>
+
+          <div class="absolute right-3 bottom-[-1rem] z-10 flex size-5 items-center justify-center rounded-full bg-green-500/30">
+            <ArrowRight class="size-4 rotate-40 text-green-500" />
+          </div>
+        </div>
+
+        <span class="mt-4 font-medium text-2xl text-white leading-none tracking-tight dark:text-black">
+          SFO
+        </span>
       </div>
     </div>
   )

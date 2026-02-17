@@ -55,3 +55,12 @@ Guidance for coding agents working in this monorepo.
 - Keep changes focused on requested scope.
 - Do not refactor unrelated areas opportunistically.
 - Do not edit `devreference1/` or `devreference2/`, no usecase to ever do that.
+
+## 8) React -> Solid porting reference
+
+- For React-to-Solid porting tasks, use this reference index first:
+  - `https://raw.githubusercontent.com/Blankeos/react-to-solid-llms/refs/heads/main/llms.txt`
+- Treat it as supplemental guidance; repo-specific behavior and conventions in this file still take priority.
+- When `llms.txt` links to repository-relative docs, resolve them via the same raw base:
+  - `https://raw.githubusercontent.com/Blankeos/react-to-solid-llms/refs/heads/main/<path>.md`
+  - Example: `https://raw.githubusercontent.com/Blankeos/react-to-solid-llms/refs/heads/main/concepts/state-vs-signals.md`
