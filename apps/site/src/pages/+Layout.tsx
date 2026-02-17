@@ -1,6 +1,7 @@
 import type { FlowProps } from "solid-js"
 import { Toaster } from "solid-sileo"
 import { useMetadata } from "vike-metadata-solid"
+import { Nav } from "@/components/nav"
 import { ThemeContextProvider, themeInitScript, useThemeContext } from "@/contexts/theme.context"
 import "@/styles/global.css"
 
@@ -43,7 +44,12 @@ function LayoutWithToaster(props: FlowProps) {
         },
       }}
     >
-      {props.children}
+      <div class="min-h-dvh w-full bg-background text-foreground">
+        <div class="mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-6">
+          <Nav />
+          {props.children}
+        </div>
+      </div>
     </Toaster>
   )
 }

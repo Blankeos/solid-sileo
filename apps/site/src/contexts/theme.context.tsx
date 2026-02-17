@@ -61,12 +61,12 @@ export { useThemeContext }
 export const ThemeContextProvider: FlowComponent = (props) => {
   const [theme, setTheme] = useLocalStorage<Theme>({
     key: "sileo-theme",
-    defaultValue: "dark",
+    defaultValue: "system",
   })
 
   /** For logic that relies on literally just `light` or `dark` themes (i.e. CodeMirror). Also infers system. */
   const [inferredTheme, setInferredTheme] =
-    createSignal<ReturnType<ThemeContextValue["inferredTheme"]>>("dark")
+    createSignal<ReturnType<ThemeContextValue["inferredTheme"]>>("light")
 
   createEffect(() => {
     let themeValue = theme()

@@ -13,8 +13,6 @@ export type { PageRoute, UseParamsResult };
 
 const pageRoutes = [
   "/",
-  "/dashboard",
-  "/dashboard/settings",
   "/play"
 ] as const;
 

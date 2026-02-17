@@ -131,100 +131,64 @@ export default function Page() {
   }
 
   return (
-    <div class="min-h-dvh w-full bg-background text-foreground">
-      <div class="mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-6">
-        <nav class="flex animate-fade-slide-up items-center justify-between py-6">
-          <a
-            class="flex items-center gap-2.5 tracking-tight transition-opacity hover:opacity-70"
-            href="/"
-          >
-            <span class="font-semibold text-sm">Sileo</span>
-          </a>
+    <>
+      <div class="flex flex-1 flex-col">
+        <main class="-mt-10 flex flex-1 flex-col items-center justify-center">
+          <h1 class="animate-fade-slide-up font-semibold text-4xl tracking-[-0.08em] sm:text-5xl">
+            Playground<span class="text-neutral-500">.</span>
+          </h1>
+          <p class="mt-4 max-w-sm animate-delay-100 animate-fade-slide-up text-center text-[15px] text-neutral-400 leading-relaxed">
+            Pick a position, click any type to fire it live.
+          </p>
+        </main>
 
-          <div class="hidden items-center gap-1 sm:flex">
-            <a
-              href="https://github.com/Blankeos/solid-sileo"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex h-8 items-center rounded-full px-3 font-medium text-muted-foreground text-xs transition-colors hover:text-foreground"
-            >
-              GitHub
-            </a>
-            <a
-              class="flex h-8 items-center rounded-full px-3 font-medium text-muted-foreground text-xs transition-colors hover:text-foreground"
-              href="https://sileo.aaryan.design/docs"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Docs
-            </a>
-            <a
-              class="flex h-8 items-center rounded-full px-3 font-medium text-foreground text-xs transition-colors"
-              href="/play"
-            >
-              Playground
-            </a>
+        <div class="flex animate-delay-200 animate-fade-in flex-col items-center gap-3 pb-8">
+          <div class="flex flex-wrap items-center justify-center gap-1.5">
+            <For each={POSITIONS}>
+              {(position) => (
+                <button
+                  type="button"
+                  onClick={() => setSelectedPosition(position)}
+                  class={[
+                    "inline-flex h-9 cursor-pointer items-center justify-center rounded-xl px-4 font-medium text-xs transition-all active:scale-95",
+                    selectedPosition() === position
+                      ? "bg-foreground text-background hover:bg-foreground hover:text-background"
+                      : "bg-accent text-muted-foreground hover:bg-accent-hover hover:text-foreground",
+                  ].join(" ")}
+                >
+                  {position}
+                </button>
+              )}
+            </For>
           </div>
-        </nav>
 
-        <div class="flex flex-1 flex-col">
-          <main class="-mt-10 flex flex-1 flex-col items-center justify-center">
-            <h1 class="animate-fade-slide-up font-semibold text-4xl tracking-[-0.08em] sm:text-5xl">
-              Playground<span class="text-neutral-500">.</span>
-            </h1>
-            <p class="mt-4 max-w-sm animate-delay-100 animate-fade-slide-up text-center text-[15px] text-neutral-400 leading-relaxed">
-              Pick a position, click any type to fire it live.
-            </p>
-          </main>
+          <div class="my-4 w-[80%] border-border border-t border-dashed" />
 
-          <div class="flex animate-delay-200 animate-fade-in flex-col items-center gap-3 pb-8">
-            <div class="flex flex-wrap items-center justify-center gap-1.5">
-              <For each={POSITIONS}>
-                {(position) => (
-                  <button
-                    type="button"
-                    onClick={() => setSelectedPosition(position)}
-                    class={[
-                      "inline-flex h-9 cursor-pointer items-center justify-center rounded-xl px-4 font-medium text-xs transition-all active:scale-95",
-                      selectedPosition() === position
-                        ? "bg-foreground text-background hover:bg-foreground hover:text-background"
-                        : "bg-accent text-muted-foreground hover:bg-accent-hover hover:text-foreground",
-                    ].join(" ")}
-                  >
-                    {position}
-                  </button>
-                )}
-              </For>
-            </div>
-
-            <div class="my-4 w-[80%] border-border border-t border-dashed" />
-
-            <div class="flex flex-wrap items-center justify-center gap-2 px-6">
-              <For each={TOAST_TYPES}>
-                {(type) => (
-                  <button
-                    type="button"
-                    onClick={() => triggerToast(type.state)}
-                    class="inline-flex h-9 cursor-pointer items-center justify-center rounded-xl bg-accent px-4 font-medium text-muted-foreground text-xs transition-all hover:bg-accent-hover hover:text-foreground active:scale-95"
-                  >
-                    {type.label}
-                  </button>
-                )}
-              </For>
-            </div>
+          <div class="flex flex-wrap items-center justify-center gap-2 px-6">
+            <For each={TOAST_TYPES}>
+              {(type) => (
+                <button
+                  type="button"
+                  onClick={() => triggerToast(type.state)}
+                  class="inline-flex h-9 cursor-pointer items-center justify-center rounded-xl bg-accent px-4 font-medium text-muted-foreground text-xs transition-all hover:bg-accent-hover hover:text-foreground active:scale-95"
+                >
+                  {type.label}
+                </button>
+              )}
+            </For>
           </div>
         </div>
-
-        <footer class="flex items-center justify-between border-border border-t py-6 transition-colors duration-150">
-          <span class="text-muted-foreground text-xs">Sileo - MIT License</span>
-          <a
-            class="text-muted-foreground text-xs transition-colors hover:text-foreground"
-            href="/play"
-          >
-            Playground -&gt;
-          </a>
-        </footer>
       </div>
-    </div>
+
+      <footer class="flex items-center justify-between border-border border-t py-6 transition-colors duration-150">
+        <span class="text-muted-foreground text-xs">Sileo - MIT License</span>
+        <a
+          class="text-muted-foreground text-xs transition-colors hover:text-foreground"
+          href="/play"
+        >
+          Playground -&gt;
+        </a>
+      </footer>
+    </>
   )
 }
