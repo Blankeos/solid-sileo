@@ -13,7 +13,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Blankeos/solid-sileo.git"
+		"url": "git+https://github.com/Blankeos/solid-sileo.git"
 	},
 	"bugs": {
 		"url": "https://github.com/Blankeos/solid-sileo/issues"
