@@ -13,12 +13,12 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Blankeos/sileo.git"
+		"url": "https://github.com/Blankeos/solid-sileo.git"
 	},
 	"bugs": {
-		"url": "https://github.com/Blankeos/sileo/issues"
+		"url": "https://github.com/Blankeos/solid-sileo/issues"
 	},
-	"homepage": "https://github.com/Blankeos/sileo#readme",
+	"homepage": "https://github.com/Blankeos/solid-sileo#readme",
 	"exports": {
 		".": {
 			"import": {
