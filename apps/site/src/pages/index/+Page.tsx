@@ -3,7 +3,7 @@ import { useMetadata } from "vike-metadata-solid"
 import { fireDemoToast, HOMEPAGE_TOAST_BUTTONS } from "@/lib/toast-presets"
 import { sileo } from "../../../../../packages/sileo/src/index"
 
-const INSTALL_COMMAND = "npm install sileo"
+const INSTALL_COMMAND = "npm install solid-sileo"
 const DESCRIPTION =
   "An opinionated toast component for Solid. Gooey SVG morphing, spring physics, and a minimal API - beautiful by default."
 
