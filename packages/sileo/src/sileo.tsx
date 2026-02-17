@@ -290,6 +290,8 @@ export function Sileo(props: SileoProps) {
 		const refreshKey = props.refreshKey;
 		const nextView = next();
 		const shouldSwap = open();
+		const incomingHasDesc =
+			Boolean(nextView.description) || Boolean(nextView.button);
 
 		if (refreshKey === undefined) {
 			setView(nextView);
@@ -307,7 +309,7 @@ export function Sileo(props: SileoProps) {
 			swapTimer = undefined;
 		}
 
-		if (shouldSwap) {
+		if (shouldSwap && incomingHasDesc) {
 			pending = { key: refreshKey, payload: nextView };
 			setIsExpanded(false);
 			swapTimer = window.setTimeout(() => {
@@ -322,6 +324,7 @@ export function Sileo(props: SileoProps) {
 			pending = null;
 			setView(nextView);
 			setApplied(refreshKey);
+			if (!incomingHasDesc) setIsExpanded(false);
 		}
 	});
 
@@ -333,10 +336,19 @@ export function Sileo(props: SileoProps) {
 		const exiting = props.exiting ?? false;
 		applied();
 
-		if (!descriptionVisible) return;
+		if (autoExpandTimer !== undefined) {
+			clearTimeout(autoExpandTimer);
+			autoExpandTimer = undefined;
+		}
+		if (autoCollapseTimer !== undefined) {
+			clearTimeout(autoCollapseTimer);
+			autoCollapseTimer = undefined;
+		}
 
-		if (autoExpandTimer !== undefined) clearTimeout(autoExpandTimer);
-		if (autoCollapseTimer !== undefined) clearTimeout(autoCollapseTimer);
+		if (!descriptionVisible) {
+			setIsExpanded(false);
+			return;
+		}
 
 		if (exiting || !canAutoExpand) {
 			setIsExpanded(false);
@@ -407,7 +419,11 @@ export function Sileo(props: SileoProps) {
 		const immediate = !ready();
 		const pillTransition = immediate
 			? { duration: 0 }
-			: { type: spring, bounce: 0.25, duration: DURATION_S };
+			: {
+					type: spring,
+					bounce: isExpanded ? 0.25 : 0,
+					duration: DURATION_S,
+				};
 		const bodyTransition = immediate
 			? { duration: 0 }
 			: {
