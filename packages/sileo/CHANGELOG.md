@@ -1,5 +1,13 @@
 # solid-sileo
 
+## 0.1.2
+
+### Patch Changes
+
+- [`2baa499`](https://github.com/Blankeos/solid-sileo/commit/2baa49996e69316d179bb8b945cf8c4f3d52bb74) Thanks [@Blankeos](https://github.com/Blankeos)! - fix: timing (less jittery animation, more consistent with upstream).
+
+- [`1461daa`](https://github.com/Blankeos/solid-sileo/commit/1461daa21189432c87e9b4ce42e1cbd312f1e92a) Thanks [@Blankeos](https://github.com/Blankeos)! - fix: bug fixes for safari (behavior seems to now be more consistent with safari).
+
 ## 0.1.1
 
 ### Patch Changes
