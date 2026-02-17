@@ -130,12 +130,15 @@ export default function Page() {
                 </svg>
               </a>
               <a
-                class="font-medium text-foreground text-xs transition-colors hover:text-foreground-hover"
+                class="inline-flex items-center gap-1.5 font-medium text-foreground text-xs transition-colors hover:text-foreground-hover"
                 href="https://sileo.aaryan.design/docs"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Documentation
+                <span class="rounded-full border border-border px-1.5 py-0.5 text-[9px] text-muted-foreground/80 uppercase tracking-[0.08em]">
+                  React API
+                </span>
               </a>
             </div>
           </div>
