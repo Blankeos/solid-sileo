@@ -24,7 +24,7 @@ import "./styles.css";
 
 const HEIGHT = 40;
 const WIDTH = 350;
-const DEFAULT_ROUNDNESS = 18;
+const DEFAULT_ROUNDNESS = 16;
 const DURATION_MS = 600;
 const DURATION_S = DURATION_MS / 1000;
 const BLUR_RATIO = 0.5;
@@ -283,6 +283,15 @@ export function Sileo(props: SileoProps) {
 			}
 		});
 	});
+
+	/* ----------------------------- Sync fill ---------------------------------- */
+
+	createEffect(() => {
+		const fill = props.fill ?? "#FFFFFF";
+		setView((prev) => (prev.fill === fill ? prev : { ...prev, fill }));
+	});
+
+	/* ----------------------------- Refresh logic ------------------------------ */
 
 	createEffect(() => {
 		const refreshKey = props.refreshKey;

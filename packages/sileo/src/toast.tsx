@@ -53,6 +53,7 @@ export interface SileoToasterProps {
 	position?: SileoPosition;
 	offset?: SileoOffsetValue | SileoOffsetConfig;
 	options?: Partial<SileoOptions>;
+	theme?: "light" | "dark" | "system";
 }
 
 /* ------------------------------ Global State ------------------------------ */
@@ -171,7 +172,7 @@ const updateToast = (id: string, options: InternalSileoOptions) => {
 };
 
 export interface SileoPromiseOptions<T = unknown> {
-	loading: Pick<SileoOptions, "title" | "icon">;
+	loading: SileoOptions;
 	success: SileoOptions | ((data: T) => SileoOptions);
 	error: SileoOptions | ((err: unknown) => SileoOptions);
 	action?: SileoOptions | ((data: T) => SileoOptions);
@@ -179,7 +180,7 @@ export interface SileoPromiseOptions<T = unknown> {
 }
 
 export const sileo = {
-	show: (opts: SileoOptions) => createToast(opts).id,
+	show: (opts: SileoOptions) => createToast({ ...opts, state: opts.type }).id,
 	success: (opts: SileoOptions) =>
 		createToast({ ...opts, state: "success" }).id,
 	error: (opts: SileoOptions) => createToast({ ...opts, state: "error" }).id,
@@ -236,7 +237,45 @@ export const sileo = {
 
 type ButtonMouseHandler = JSX.EventHandler<HTMLButtonElement, MouseEvent>;
 
+const THEME_FILLS = {
+	light: "#1a1a1a",
+	dark: "#f2f2f2",
+} as const;
+
+function createResolvedTheme(
+	theme: () => "light" | "dark" | "system" | undefined,
+) {
+	const initial = (): "light" | "dark" => {
+		const value = theme();
+		if (value === "light" || value === "dark") return value;
+		if (typeof window === "undefined") return "light";
+		return window.matchMedia("(prefers-color-scheme: dark)").matches
+			? "dark"
+			: "light";
+	};
+
+	const [resolved, setResolved] = createSignal<"light" | "dark">(initial());
+
+	createEffect(() => {
+		const value = theme();
+		if (value === "light" || value === "dark") {
+			setResolved(value);
+			return;
+		}
+		if (typeof window === "undefined") return;
+		const mq = window.matchMedia("(prefers-color-scheme: dark)");
+		const handler = (e: MediaQueryListEvent) =>
+			setResolved(e.matches ? "dark" : "light");
+		setResolved(mq.matches ? "dark" : "light");
+		mq.addEventListener("change", handler);
+		onCleanup(() => mq.removeEventListener("change", handler));
+	});
+
+	return resolved;
+}
+
 export function Toaster(props: SileoToasterProps) {
+	const resolvedTheme = createResolvedTheme(() => props.theme);
 	const [toasts, setToasts] = createSignal<SileoItem[]>(store.toasts);
 	const [activeId, setActiveId] = createSignal<string>();
 
@@ -272,8 +311,9 @@ export function Toaster(props: SileoToasterProps) {
 			const key = timeoutKey(item);
 			if (timers.has(key)) continue;
 
+			if (item.duration === null) continue;
 			const duration = item.duration ?? DEFAULT_DURATION;
-			if (duration === null || duration <= 0) continue;
+			if (duration <= 0) continue;
 
 			timers.set(
 				key,
@@ -416,6 +456,7 @@ export function Toaster(props: SileoToasterProps) {
 							<section
 								data-sileo-viewport
 								data-position={pos}
+								data-theme={props.theme ? resolvedTheme() : undefined}
 								aria-live="polite"
 								style={getViewportStyle(pos)}
 							>
@@ -435,7 +476,12 @@ export function Toaster(props: SileoToasterProps) {
 														position={pill}
 														expand={expand}
 														icon={current().icon}
-														fill={current().fill}
+														fill={
+															current().fill ??
+															(props.theme
+																? THEME_FILLS[resolvedTheme()]
+																: undefined)
+														}
 														styles={current().styles}
 														button={current().button}
 														roundness={current().roundness}

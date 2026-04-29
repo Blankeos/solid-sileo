@@ -456,11 +456,22 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	*,
-	*::before,
-	*::after {
+	[data-sileo-viewport],
+	[data-sileo-viewport] *,
+	[data-sileo-viewport] *::before,
+	[data-sileo-viewport] *::after {
 		animation-duration: 0.01ms;
 		animation-iteration-count: 1;
 		transition-duration: 0.01ms;
 	}
+}
+
+/* --------------------------------- Themes -------------------------------- */
+
+[data-sileo-viewport][data-theme="dark"] [data-sileo-description] {
+	color: rgba(0, 0, 0, 0.5);
+}
+
+[data-sileo-viewport][data-theme="light"] [data-sileo-description] {
+	color: rgba(255, 255, 255, 0.5);
 }
