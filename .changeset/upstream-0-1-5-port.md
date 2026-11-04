@@ -1,5 +1,5 @@
 ---
-"solid-sileo": minor
+"solid-sileo": patch
 ---
 
 Port upstream sileo v0.1.4 and v0.1.5 features:
