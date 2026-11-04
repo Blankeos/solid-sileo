@@ -82,15 +82,24 @@ const STATE_ICON: Record<State, JSX.Element> = {
 	action: <ArrowRight />,
 };
 
-function GooeyDefs(props: { filterId: string; blur: number }) {
+const REGION_SIGMA = 2;
+
+function GooeyDefs(props: {
+	filterId: string;
+	blur: number;
+	width: number;
+	height: number;
+}) {
+	const margin = () => props.blur * REGION_SIGMA;
 	return (
 		<defs>
 			<filter
 				id={props.filterId}
-				x="-20%"
-				y="-20%"
-				width="140%"
-				height="140%"
+				filterUnits="userSpaceOnUse"
+				x={-margin()}
+				y={-margin()}
+				width={props.width + margin() * 2}
+				height={props.height + margin() * 2}
 				color-interpolation-filters="sRGB"
 			>
 				<feGaussianBlur
@@ -462,10 +471,6 @@ export function Sileo(props: SileoProps) {
 		);
 	});
 
-	const canvasStyle = createMemo<JSX.CSSProperties>(() => ({
-		filter: `url(#${filterId()})`,
-	}));
-
 	const rootStyle = createMemo(() => {
 		const expand = props.expand ?? "bottom";
 		return {
@@ -582,40 +587,43 @@ export function Sileo(props: SileoProps) {
 			onTransitionEnd={handleTransitionEnd}
 			onPointerDown={handlePointerDown}
 		>
-			<div
-				data-sileo-canvas
-				data-edge={props.expand ?? "bottom"}
-				style={canvasStyle()}
-			>
+			<div data-sileo-canvas data-edge={props.expand ?? "bottom"}>
 				<svg
 					data-sileo-svg
 					width={WIDTH}
 					height={svgHeight()}
 					viewBox={`0 0 ${WIDTH} ${svgHeight()}`}
 				>
-					<title>Sileo Notification</title>
-					<GooeyDefs filterId={filterId()} blur={blur()} />
-					<rect
-						ref={setPillRef}
-						data-sileo-pill
-						x={0}
-						width={HEIGHT}
-						height={HEIGHT}
-						rx={resolvedRoundness()}
-						ry={resolvedRoundness()}
-						fill={view().fill}
-					/>
-					<rect
-						ref={setBodyRef}
-						data-sileo-body
-						y={HEIGHT}
+					<title>sileo notification</title>
+					<GooeyDefs
+						filterId={filterId()}
+						blur={blur()}
 						width={WIDTH}
-						height={0}
-						opacity={0}
-						rx={resolvedRoundness()}
-						ry={resolvedRoundness()}
-						fill={view().fill}
+						height={svgHeight()}
 					/>
+					<g filter={`url(#${filterId()})`}>
+						<rect
+							ref={setPillRef}
+							data-sileo-pill
+							x={0}
+							width={HEIGHT}
+							height={HEIGHT}
+							rx={resolvedRoundness()}
+							ry={resolvedRoundness()}
+							fill={view().fill}
+						/>
+						<rect
+							ref={setBodyRef}
+							data-sileo-body
+							y={HEIGHT}
+							width={WIDTH}
+							height={0}
+							opacity={0}
+							rx={resolvedRoundness()}
+							ry={resolvedRoundness()}
+							fill={view().fill}
+						/>
+					</g>
 				</svg>
 			</div>
 

@@ -325,6 +325,10 @@ export function Toaster(props: SileoToasterProps) {
 	onMount(() => {
 		const listener: SileoListener = (next) => setToasts(next);
 		store.listeners.add(listener);
+		// Re-read on subscribing: the signal was seeded during render, so a store
+		// write in the gap before mount (e.g. a route change where the outgoing
+		// page clears the store) would otherwise be missed and leave stale toasts.
+		setToasts(store.toasts);
 
 		onCleanup(() => {
 			store.listeners.delete(listener);
