@@ -1,5 +1,25 @@
 # solid-sileo
 
+## 0.1.3
+
+### Patch Changes
+
+- [`c42b2eb`](https://github.com/Blankeos/solid-sileo/commit/c42b2eba8dd23c1924a64343bc501db2c2cd5057) Thanks [@Blankeos](https://github.com/Blankeos)! - Port upstream sileo v0.1.4 and v0.1.5 features:
+
+  - Add `theme` prop to `<Toaster>` (`"light" | "dark" | "system"`) that auto-sets toast fill and description color, with `prefers-color-scheme` listener for `"system"`.
+  - Allow `sileo.show({ type })` to render stateful toasts (success/error/warning/info/action/loading) without a separate method call. State-specific methods continue to take precedence.
+  - Scope `prefers-reduced-motion: reduce` CSS to `[data-sileo-viewport]` only, so it no longer disables animations across the host app.
+  - Sync `fill` updates into the active view immediately, so dynamic fill changes apply without waiting for a refresh swap.
+  - Allow full `SileoOptions` (not just `title`/`icon`) on `sileo.promise({ loading })`.
+  - Tighten the duration-`null` (sticky toast) check so `null` is preserved through `??` fallback.
+  - `DEFAULT_ROUNDNESS` 18 → 16 to match upstream.
+
+- [#6](https://github.com/Blankeos/solid-sileo/pull/6) [`5815819`](https://github.com/Blankeos/solid-sileo/commit/5815819da704dfc661799493438ebaca3da54c3d) Thanks [@Blankeos](https://github.com/Blankeos)! - Port upstream sileo v0.1.6 fixes:
+
+  - Gooey filter is now applied to an SVG `<g>` with an explicit `userSpaceOnUse` region (blur margin around the toast) instead of a CSS `filter` on the canvas div. Avoids clipping/oversized filter regions and is cheaper to rasterize.
+  - `<Toaster>` re-reads the store when it subscribes, so toasts cleared between render and mount (e.g. on route change) no longer linger.
+  - SVG title lowercased to "sileo notification".
+
 ## 0.1.2
 
 ### Patch Changes
