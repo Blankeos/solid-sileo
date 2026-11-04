@@ -46,6 +46,7 @@
 		"build": "tsdown",
 		"dev": "tsdown --watch",
 		"check": "tsc --noemit",
+		"test": "vitest run",
 		"lint": "biome check src",
 		"lint:fix": "biome check --write src"
 	},
@@ -53,10 +54,14 @@
 		"solid-js": "^1.9.0"
 	},
 	"devDependencies": {
+		"@solidjs/testing-library": "^0.8.10",
+		"happy-dom": "^21.0.4",
 		"rolldown": "^0.15.1",
 		"rolldown-plugin-solid": "^0.2.1",
 		"tsdown": "^0.20.3",
-		"typescript": "^5.9.3"
+		"typescript": "^5.9.3",
+		"vite-plugin-solid": "^2.11.15",
+		"vitest": "^5.1.0"
 	},
 	"dependencies": {
 		"motion": "^12.34.1"
